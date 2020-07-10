@@ -7,4 +7,4 @@ ADD https://github.com/gchq/CyberChef/releases/download/v${CYBER_CHEF_VERSION}/C
 RUN cd /usr/share/nginx/html && \
       unzip CyberChef_v${CYBER_CHEF_VERSION}.zip && \
       ln -sf /usr/share/nginx/html/CyberChef_v${CYBER_CHEF_VERSION}.html /usr/share/nginx/html/index.html && \
-      rm CyberChef_v{CYBER_CHEF_VERSION}.zip
+      rm CyberChef_v${CYBER_CHEF_VERSION}.zip

@@ -6,4 +6,4 @@ My public images:
 - [frp](https://github.com/fatedier/frp) client: `docker pull jayven/frpc:latest`
 - Low memory mysql ([original](https://github.com/alexanderkoller/low-memory-mysql)): `docker pull jayven/lmmysql:latest`
 - [CyberChef](https://github.com/gchq/CyberChef): `docker pull jayven/cyberchef:latest`
-- [qncert] Auto update cert (using let's encrypt) to qiniu: `docker pull jayven/qncert:latest`
+- Auto update cert (using let's encrypt) to qiniu: `docker pull jayven/qncert:latest`

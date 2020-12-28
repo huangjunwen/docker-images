@@ -1,6 +1,6 @@
 ### MySQL 8 GTID replicator
 
-This image runs a MySQL 8 replicator (both master/replicator must set `gtid_mode=on`), work flow:
+This image runs a MySQL 8 replicator (both master must have `gtid_mode=on`), work flow:
 
 - Make a full dump (`mysqldump`) from master into `/docker-entrypoint-initdb.d/000-master-dump.sql` if not exists.
 - Write replication setup statement (`change master to ...`) into `/docker-entrypoint-initdb.d/001-repl-setup.sql` if no exists.

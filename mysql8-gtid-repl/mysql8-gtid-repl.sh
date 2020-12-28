@@ -17,7 +17,7 @@ if [ -z "$MYSQL_MASTER_PASSWORD" ]; then
   mysql_error "Missing \$MYSQL_MASTER_PASSWORD"
 fi
 
-master_dump_done_file=/docker-entrypoint-initdb.d/000-master-dump.done
+master_dump_done_file=/docker-entrypoint-initdb.d/.000-master-dump.done
 master_dump_sql_file=/docker-entrypoint-initdb.d/000-master-dump.sql
 repl_setup_sql_file=/docker-entrypoint-initdb.d/001-repl-setup.sql
 
@@ -31,6 +31,9 @@ master_exec_sql() {
   return $?
 }
 
+# ref:
+# - http://ronaldbradford.com/blog/i-want-a-mysqldump-ignore-database-option-2012-04-18/
+# - https://serversforhackers.com/c/mysqldump-with-modern-mysql
 master_dump() {
   if [ -f $master_dump_done_file ]; then
     mysql_note "No need to dump master"
@@ -66,17 +69,22 @@ repl_setup() {
   if [ -f $repl_setup_sql_file ]; then
     return 0
   fi
-  echo "CHANGE MASTER TO MASTER_HOST='$MYSQL_MASTER_HOST'
-    MASTER_PORT=$MYSQL_MASTER_PORT
-    MASTER_USER='$MYSQL_MASTER_USER'
-    MASTER_PASSWORD='$MYSQL_MASTER_PASSWORD'
+  echo "CHANGE MASTER TO MASTER_HOST='$MYSQL_MASTER_HOST',
+    MASTER_PORT=$MYSQL_MASTER_PORT,
+    MASTER_USER='$MYSQL_MASTER_USER',
+    MASTER_PASSWORD='$MYSQL_MASTER_PASSWORD',
     MASTER_AUTO_POSITION=1;
 START SLAVE;" > $repl_setup_sql_file
 }
 
+# Dump master if not exists.
 master_dump
 
+# Setup slave.
 repl_setup
 
-# Now execute the original entry point.
+# Enforce gtid mode enabled.
+set -- "$@" --gtid-mode=ON --enforce-gtid-consistency=ON
+
+# Run the original main.
 _main "$@"

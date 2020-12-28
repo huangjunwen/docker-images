@@ -53,7 +53,7 @@ master_dump() {
   databases=$(master_exec_sql "SELECT IFNULL(GROUP_CONCAT(schema_name SEPARATOR ' '), '') 
       FROM information_schema.schemata 
       WHERE schema_name NOT IN ('mysql', 'information_schema', 'performance_schema', 'sys')") || exit $?
-  if [ -z $databases ]; then
+  if [ -z "$databases" ]; then
     mysql_error "No database found on master, please at least create one"
   fi
   mysql_note "Master databases to be dumped: $databases"
@@ -84,7 +84,7 @@ master_dump
 repl_setup
 
 # Enforce gtid mode enabled.
-set -- "$@" --gtid-mode=ON --enforce-gtid-consistency=ON
+set -- "$@" --relay-log=repl-relay --gtid-mode=ON --enforce-gtid-consistency=ON
 
 # Run the original main.
 _main "$@"

@@ -83,8 +83,8 @@ master_dump
 # Setup slave.
 repl_setup
 
-# Enforce gtid mode enabled.
-set -- "$@" --relay-log=repl-relay --gtid-mode=ON --enforce-gtid-consistency=ON
+# Enforce gtid mode enabled and ignore system db.
+set -- "$@" --relay-log=repl-relay --gtid-mode=ON --enforce-gtid-consistency=ON --replicate-ignore-db=mysql --replicate-ignore-db=information_schema --replicate-ignore-db=performance_schema --replicate-ignore-db=sys
 
 # Run the original main.
 _main "$@"
